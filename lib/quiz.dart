@@ -13,8 +13,7 @@ class Quiz extends StatefulWidget {
 
 class _QuizState extends State<Quiz> {
   List<String> selectedAnswers = [];
-
-  Widget? activeScreen;
+  late Widget activeScreen;
 
   @override
   void initState() {
@@ -42,31 +41,28 @@ class _QuizState extends State<Quiz> {
 
     if (selectedAnswers.length == questions.length) {
       setState(() {
-        selectedAnswers = [];
-        activeScreen =  ResultScreen(chosenAnswers: [],);
+        activeScreen = ResultScreen(chosenAnswers: selectedAnswers);
       });
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-     Widget screenWidget = StartScreen(switchScreen, startQuiz: () {  },);
-
-     if(activeScreen == QuestionScreen(onSelectAnswer: chooseAnswer)){
-       screenWidget = QuestionScreen(onSelectAnswer: chooseAnswer);
-     }
-
-     if(screenWidget == ResultScreen) {
-      screenWidget =  ResultScreen(chosenAnswers: selectedAnswers,);
-     }
-
-    return MaterialApp(
-      home: Scaffold(
-        //backgroundColor: Colors.lightBlue.shade400,
-        body: activeScreen,
-      ),
-    );
+    if (activeScreen is ResultScreen) {
+      return MaterialApp(
+        home: Scaffold(
+          //backgroundColor: Colors.lightBlue.shade400,
+          body: activeScreen,
+        ),
+      );
+    } else {
+      return MaterialApp(
+        home: Scaffold(
+          //backgroundColor: Colors.lightBlue.shade400,
+          body: activeScreen,
+        ),
+      );
+    }
   }
 }
+
